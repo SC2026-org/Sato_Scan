@@ -137,6 +137,7 @@
                 '<label class="text-xs font-semibold text-gray-500 mb-1 block">Olahraga</label>' +
                 '<select id="sesiOlahraga" disabled class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-100 text-gray-400 text-sm"><option value="">Pilih cabang dulu</option></select>' +
               '</div>' +
+              '<p id="sesiError" class="hidden text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3"></p>' +
               '<button id="btnMulaiSesi" class="mt-2 w-full bg-mustard text-forest font-bold text-base py-4 rounded-2xl shadow-sm active:scale-[0.98] transition">Mulai Sesi Absen</button>' +
             '</div>' +
           '</div>' +
@@ -145,10 +146,19 @@
 
     document.getElementById('btnLogout').onclick = function () { hapusSession(); renderLogin(); };
 
+    function tampilkanErrorSesi(pesan) {
+      var el = document.getElementById('sesiError');
+      el.textContent = pesan;
+      el.classList.remove('hidden');
+    }
+
     panggilGet('daftarCabang').then(function (list) {
       var sel = document.getElementById('sesiCabang');
       sel.innerHTML = '<option value="">Pilih Cabang</option>';
       list.forEach(function (c) { sel.innerHTML += '<option value="' + c + '">' + c + '</option>'; });
+    }).catch(function (err) {
+      document.getElementById('sesiCabang').innerHTML = '<option value="">Gagal memuat</option>';
+      tampilkanErrorSesi('Gagal memuat daftar Cabang: ' + err.message + ' (cek APPS_SCRIPT_URL / koneksi)');
     });
 
     document.getElementById('sesiCabang').onchange = function () {
@@ -161,6 +171,9 @@
         list.forEach(function (o) { selO.innerHTML += '<option value="' + o + '">' + o + '</option>'; });
         selO.disabled = false;
         selO.className = 'w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 text-sm';
+      }).catch(function (err) {
+        selO.innerHTML = '<option value="">Gagal memuat</option>';
+        tampilkanErrorSesi('Gagal memuat Olahraga: ' + err.message);
       });
     };
 
