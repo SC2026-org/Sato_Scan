@@ -152,7 +152,7 @@
       el.classList.remove('hidden');
     }
 
-    panggilGet('daftarCabang').then(function (list) {
+    panggilGet('getDaftarCabang').then(function (list) {
       var sel = document.getElementById('sesiCabang');
       sel.innerHTML = '<option value="">Pilih Cabang</option>';
       list.forEach(function (c) { sel.innerHTML += '<option value="' + c + '">' + c + '</option>'; });
@@ -166,7 +166,7 @@
       var selO = document.getElementById('sesiOlahraga');
       if (!cabang) { selO.innerHTML = '<option value="">Pilih cabang dulu</option>'; selO.disabled = true; return; }
       selO.innerHTML = '<option value="">Memuat...</option>';
-      panggilGet('olahragaByCabang', { cabang: cabang }).then(function (list) {
+      panggilGet('getOlahragaByCabang', { cabang: cabang }).then(function (list) {
         selO.innerHTML = '<option value="">Pilih Olahraga</option>';
         list.forEach(function (o) { selO.innerHTML += '<option value="' + o + '">' + o + '</option>'; });
         selO.disabled = false;
